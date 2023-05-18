@@ -107,29 +107,31 @@ print(full_recipes.groupby('indiv_rating')[['total_fat', 'saturated_fat']].media
 |              5 |          20 |              22 |
 
 <iframe src="assets/indiv-fats.html" width=800 height=500 frameBorder=0></iframe>
+
 - The dataframe and graph above shows a comparison of the median PDV for `total_fat` and `saturated_fat` for each `indiv_rating`. They reveal the general IQR distribution of fat and allow the reader to directly see how average fat levels change as the recipe rating goes higher. I chose to represent this comparison with a grouped box plot to directly show the side by side distribution differences between `total_fat` and `saturated_fat`
 
 
 I was also interested in how the recipe's `date_submitted` values related with the length of each recipe (`minutes`) so I performed an additional aggregate exploration shown below using 10 date bins to compoare various recipe attributes:
 
 ```py
-print(split_time.groupby('date_submitted(percentile)')[['minutes', 'n_steps', 'n_ingredients', 'calories', 'total_fat']].mean().to_markdown())
+print(split_time.groupby('date_submitted(percentile)')[['minutes', 'n_steps', 'n_ingredients', 'calories', 'total_fat']].median().to_markdown())
 ```
-
 |   date_submitted(percentile) |   minutes |   n_steps |   n_ingredients |   calories |   total_fat |
 |-----------------------------:|----------:|----------:|----------------:|-----------:|------------:|
-|                          0.1 |   80.2761 |   9.61853 |         8.98569 |    397.839 |     29.8684 |
-|                          0.2 |   94.7813 |   9.39606 |         8.8121  |    409.634 |     31.1828 |
-|                          0.3 |   82.3899 |   9.32449 |         8.79641 |    414.967 |     31.3078 |
-|                          0.4 |  165.948  |  10.2368  |         8.97657 |    439.147 |     33.204  |
-|                          0.5 |  100.972  |   9.95503 |         9.04796 |    412.489 |     30.5909 |
-|                          0.6 |  101.541  |   9.68788 |         8.9592  |    410.773 |     31.4095 |
-|                          0.7 |   82.8657 |  10.2275  |         9.18446 |    413.02  |     31.4222 |
-|                          0.8 |  100.15   |   9.61097 |         8.93267 |    404.016 |     30.7462 |
-|                          0.9 |  178.461  |  10.3345  |         9.38282 |    431.66  |     32.4035 |
-|                          1   |   79.6851 |  11.7793  |         9.63483 |    461.484 |     37.0418 |
+|                          0.1 |        35 |         8 |               9 |      296.2 |          19 |
+|                          0.2 |        35 |         8 |               8 |      295.4 |          19 |
+|                          0.3 |        35 |         8 |               8 |      298.5 |          19 |
+|                          0.4 |        35 |         9 |               9 |      310   |          19 |
+|                          0.5 |        35 |         9 |               9 |      306.4 |          20 |
+|                          0.6 |        31 |         8 |               9 |      296.3 |          20 |
+|                          0.7 |        39 |         9 |               9 |      296.3 |          19 |
+|                          0.8 |        33 |         8 |               9 |      287.1 |          18 |
+|                          0.9 |        35 |         9 |               9 |      312.4 |          20 |
+|                          1   |        40 |        10 |               9 |      327.5 |          24 |
+
 
 <iframe src="assets/date-min.html" width=800 height=500 frameBorder=0></iframe>
+
 - Because the range of the `date_submitted` values were so big in this dataset (from `2008-01-01 00:00:00` to `2018-12-04 00:00:00`), I decided to split the `date_submitted` column into percentiles in order to calculate the aggregate statistics for `minutes`, `n_steps`, `n_ingredients`, `calories`, and `total_fat`.
 
 ---
