@@ -11,24 +11,112 @@ While analyzing the dataset and ways that the different attributes of the recipe
 #### Dataset Detailed Description
 The first dataset (called 'recipes') contains recipe information from food.com's Raw_recipes.csv file and includes the recipe's creator, name, date submitted, tags, nutritonal content, steps, ingredients, description. There are 83782 rows in the data, one for each recipe. For my question in particular, I looked specifically at the 'nutrition' column, which contains nutrition information in the form `[calories (#), total fat (PDV), sugar (PDV), sodium (PDV), protein (PDV), saturated fat (PDV), carbohydrates (PDV)]`; PDV stands for “percentage of daily value".
 
+```py
+print(recipes.dtypes.to_markdown())
+```
+
+| column name    | type   |
+|:---------------|:-------|
+| name           | object |
+| id             | int64  |
+| minutes        | int64  |
+| contributor_id | int64  |
+| submitted      | object |
+| tags           | object |
+| nutrition      | object |
+| n_steps        | int64  |
+| steps          | object |
+| description    | object |
+| ingredients    | object |
+| n_ingredients  | int64  |
+
 The second dataset (called 'interactions') contains user interaction data from food.com's Raw_interactions.csv file and includes user account information, reviews, and ratings for various recipes. There are 731927 rows in this dataframe, one for each interaction. The main column I used to answer my question was the 'ratings' column, which contains the rating given by each user for the recipe.
+
+```py
+print(interactions.dtypes.to_markdown())
+```
+|column name| type   |
+|:----------|:-------|
+| user_id   | int64  |
+| recipe_id | int64  |
+| date      | object |
+| rating    | int64  |
+| review    | object |
 
 ---
 ## Cleaning and Exploratory Data Analysis
+
+#### Data Cleaning
 The data cleaning steps I took to organize my two datasets were to merge the data and then clean up the resulting dataframe to make it easily usable for data anlysis. My steps specifically included:
 1. Left merging the recipes and interaction data sets together on 'recipe_id' column.
-2. Dropping all unnecessary columns that I wasn't planning to use in my data analysis ('review', 'contributor_id', 'description',  'tags', and 'user_id').
+2. Dropping all unnecessary columns that I wasn't planning to use in my data analysis ('review', 'contributor_id', 'description',  'tags', 'steps', 'ingredients', and 'user_id').
 2. Filling all user ratings of 0 with `np.nan`. This is a necessary step to allow for accurate data analysis without having all the 0's skew the results. In addition, the rating system in food.com is from 1 to 5 and so the ratings of 0 in the data were likely because the recipe itself had no ratings and therefore, a 0 was inputted to represent the lack of ratings, not that users disliked the recipe. (In fact, many of these recipes with ratings of 0 had great reviews!)
 3. Calculating the average rating for recipe and adding these averages to the overall full_recipe dataframe for the recipes in each row.
 5. Renaming columns in the dataframe so that their names are more descriptive.
 6. Converting the data types of each column respectively to match the type of data that they are representing:
    - Changing columns with dates to datetime format.
    - Splitting the nutrition column into 7 separate columns of float type for each nutrition fact.
-   - Changing the string versions of lists in the recipe ingredients and steps columns into lists of strings.
 7. Reordering the columns in the dataframe so that it is more legible for the reader reading from left to right.
 
-INPUT HEAD OF CLEANED DATAFRAME
 
+Below are the first 5 rows of the fully cleaned `full_recipes` dataframe:
+```py
+print(full_recipes.head().to_markdown(index = False))
+
+```
+
+|   recipe_id | date_submitted      | interaction_date    | name                                 |   indiv_rating |   average_rating |   minutes |   n_steps |   n_ingredients |   calories |   total_fat |   sugar |   sodium |   protein |   saturated_fat |   carbs |
+|------------:|:--------------------|:--------------------|:-------------------------------------|---------------:|-----------------:|----------:|----------:|----------------:|-----------:|------------:|--------:|---------:|----------:|----------------:|--------:|
+|      333281 | 2008-10-27 00:00:00 | 2008-11-19 00:00:00 | 1 brownies in the world    best ever |              4 |                4 |        40 |        10 |               9 |      138.4 |          10 |      50 |        3 |         3 |              19 |       6 |
+|      453467 | 2011-04-11 00:00:00 | 2012-01-26 00:00:00 | 1 in canada chocolate chip cookies   |              5 |                5 |        45 |        12 |              11 |      595.1 |          46 |     211 |       22 |        13 |              51 |      26 |
+|      306168 | 2008-05-30 00:00:00 | 2008-12-31 00:00:00 | 412 broccoli casserole               |              5 |                5 |        40 |         6 |               9 |      194.8 |          20 |       6 |       32 |        22 |              36 |       3 |
+|      306168 | 2008-05-30 00:00:00 | 2009-04-13 00:00:00 | 412 broccoli casserole               |              5 |                5 |        40 |         6 |               9 |      194.8 |          20 |       6 |       32 |        22 |              36 |       3 |
+|      306168 | 2008-05-30 00:00:00 | 2013-08-02 00:00:00 | 412 broccoli casserole               |              5 |                5 |        40 |         6 |               9 |      194.8 |          20 |       6 |       32 |        22 |              36 | 
+
+#### Univariate Analysis
+
+
+
+#### Bivariate Analysis
+
+
+#### Interesting Aggregates
+As part of my exploratory data analysis, I chose a couple columns from `full_recipes` to examine aggregate statistics.
+
+```py
+print(full_recipes.groupby('indiv_rating')[['total_fat', 'saturated_fat']].mean().to_markdown())
+```
+|   indiv_rating |   total_fat |   saturated_fat |
+|---------------:|------------:|----------------:|
+|              1 |     37.0564 |         46.6791 |
+|              2 |     32.7669 |         42.8822 |
+|              3 |     31.6405 |         40.0881 |
+|              4 |     29.9404 |         36.4327 |
+|              5 |     31.7924 |         39.2268 |
+
+- The dataframe above shows a comparison of the mean TDV for `total_fat` and `saturated_fat` for each `indiv_rating`. This reveals the general distribution of mean fat compared with recipe ratings and allows the reader to directly see how average fat levels change as the recipe rating goes higher.
+INSERT GRAPH
+
+I was also interested in how the recipe's `date_submitted` values related with the length that each recipe was estimated to take (`minutes`) so I performed an additional aggregate exploration shown below:
+
+```py
+print(split_time.groupby('date_submitted(percentile)')[['minutes', 'n_steps', 'n_ingredients', 'calories', 'total_fat']].mean().to_markdown())
+```
+|   date_submitted(percentile) |   minutes |   n_steps |   n_ingredients |   calories |   total_fat |
+|-----------------------------:|----------:|----------:|----------------:|-----------:|------------:|
+|                          0.1 |   80.2761 |   9.61853 |         8.98569 |    397.839 |     29.8684 |
+|                          0.2 |   94.7813 |   9.39606 |         8.8121  |    409.634 |     31.1828 |
+|                          0.3 |   82.3899 |   9.32449 |         8.79641 |    414.967 |     31.3078 |
+|                          0.4 |  165.948  |  10.2368  |         8.97657 |    439.147 |     33.204  |
+|                          0.5 |  100.972  |   9.95503 |         9.04796 |    412.489 |     30.5909 |
+|                          0.6 |  101.541  |   9.68788 |         8.9592  |    410.773 |     31.4095 |
+|                          0.7 |   82.8657 |  10.2275  |         9.18446 |    413.02  |     31.4222 |
+|                          0.8 |  100.15   |   9.61097 |         8.93267 |    404.016 |     30.7462 |
+|                          0.9 |  178.461  |  10.3345  |         9.38282 |    431.66  |     32.4035 |
+|                          1   |   79.6851 |  11.7793  |         9.63483 |    461.484 |     37.0418 |
+
+- Because the range of the `date_submitted` values were so big in this dataset (from `2008-01-01 00:00:00` to `2018-12-04 00:00:00`), I decided to split the `date_submitted` column into percentiles in order to calculate the aggregate statistics for `minutes`, `n_steps`, `n_ingredients`, `calories`, and `total_fat`.
+INSERT GRAPH
 
 ---
 ## Assessment of Missingness
@@ -51,12 +139,36 @@ When comparing missingness between `average_ratings` and `indiv_ratings`, I used
 - null: average_ratings is not MAR dependent on indiv_ratings
 - alternative: average_ratings is MAR dependent on indiv_ratings
 
-Then for the `indiv_ratings` column, I created two new boolean columns for whether a value is missing in the `average_ratings` column and the `indiv_ratings` column. I then ran a permutation test using the total variation distance as my test statistic. What I got was a p-value of 0.0 in which all values in the test statistic array were less than my observed test statistic (0.947). Therefore, I rejected the null hypothesis to claim that there is significant statistical evidence that missingness in `average_ratings` is MAR dependent on missingness in `indiv_ratings`.
+Then for the `indiv_ratings` column, I created two new boolean columns for whether a value is missing in the `average_ratings` column and the `indiv_ratings` column. Below is a pivot_table of these two boolean columns using the code:
+
+```py
+missing_pivot = missing_df.pivot_table(index = 'indiv_missing', columns = 'average_missing', aggfunc = 'count', values = 'recipe_id', fill_value = 0)
+missing_pivot = missing_pivot / missing_pivot.sum(axis = 0)
+```
+| indiv_missing   |     False |   True |
+|:----------------|----------:|-------:|
+| False           | 0.94708   |      0 |
+| True            | 0.0529199 |      1 |
+
+I then ran a permutation test using the total variation distance as my test statistic. What I got was a p-value of 0.0 in which all values in the test statistic array were less than my observed test statistic (0.947). Therefore, I rejected the null hypothesis to claim that there is significant statistical evidence that missingness in `average_ratings` is MAR dependent on missingness in `indiv_ratings`.
 INSERT PLOTS
 
-When comparing missingness between `average_ratings` and `indiv_ratings`, I used the hypotheses:
+When comparing missingness between `average_ratings` and `date_submitted`, I used the hypotheses:
 - null: average_ratings is not MAR dependent on date_submitted
 - alternative: average_ratings is MAR dependent on dated_submitted
+
+Below is a pivot table comparing the date a recipe is submitted and whether the recipe is missing its average rating or not:
+```py
+missing_pivot = missing_df.pivot_table(index = 'date_submitted', columns = 'average_missing', aggfunc = 'count', values = 'recipe_id', fill_value = 0)
+missing_pivot = missing_pivot / missing_pivot.sum(axis = 0)
+```
+| date_submitted      |       False |        True |
+|:--------------------|------------:|------------:|
+| 2011-03-04 00:00:00 | 9.92869e-05 | 0           |
+| 2012-05-03 00:00:00 | 4.31682e-05 | 0           |
+| 2009-10-12 00:00:00 | 0.0012821   | 0.00288081  |
+| 2012-12-20 00:00:00 | 2.15841e-05 | 0           |
+| 2010-05-05 00:00:00 | 0.00145045  | 0.000360101 |
 
 For the `date_submitted` column, I also used a permutation test similar to the test with `indiv_ratings` by calculating the total variation distance between the missing and non-missing `average_ratings` distributions with respect to the dates each recipe was submitted. Here, my observed test statistic was 0.425 and my p-value was also 0.0. I then rejected my null hypothesis again to conclude that there is significant statistical evidence that missingness in `average_ratings` is MAR dependent on `date_submitted`.
 INSERT PLOTS
