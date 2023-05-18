@@ -85,7 +85,11 @@ print(full_recipes.head().to_markdown(index = False))
 - This distribution is also similar to the distribution above. It is unimodal, there is a right skew, and the median is centered at 22 PDV (which is close to the median at 20 PDV of the Total Fat Distribution). The IQR is approximately 42 which means that the spread of this distribution is wider than the Total Fat Distribution. Similarly, the skew in this distribution and the large number of outliers indicates that using the median for any hypothesis testing is more accurate than using the mean, which can be affected by the skew and outlier data.
 
 #### Bivariate Analysis
+<iframe src="assets/avg-fat.html" width=450 height=550 frameBorder=0></iframe>
+- This comparison between average recipe rating and total fat (PDV) in a recipe reveals that the correlation coefficient r seems to have a low positive value. This means that there may possibly be a slight trend where higher average recipe ratings also have higher total fat content.
 
+<iframe src="assets/avg-sfat.html" width=450 height=550 frameBorder=0></iframe>
+- Again, this graph is similar to the scatterplot between total fat and average recipe rating. There is also a similar trend where the data follows a correlation coefficient r that has a low positive value.
 
 #### Interesting Aggregates
 As part of my exploratory data analysis, I chose a couple columns from `full_recipes` to examine aggregate statistics.
@@ -102,8 +106,9 @@ print(full_recipes.groupby('indiv_rating')[['total_fat', 'saturated_fat']].mean(
 |              4 |     29.9404 |         36.4327 |
 |              5 |     31.7924 |         39.2268 |
 
-- The dataframe above shows a comparison of the mean TDV for `total_fat` and `saturated_fat` for each `indiv_rating`. This reveals the general distribution of mean fat compared with recipe ratings and allows the reader to directly see how average fat levels change as the recipe rating goes higher.
-INSERT GRAPH
+<iframe src="assets/indiv-fats.html" width=450 height=550 frameBorder=0></iframe>
+- The dataframe above shows a comparison of the mean TDV for `total_fat` and `saturated_fat` for each `indiv_rating`. This reveals the general distribution of mean fat compared with recipe ratings and allows the reader to directly see how average fat levels change as the recipe rating goes higher. I chose to represent this comparison with a grouped box plot to directly show the side by side differences in Fat PDV between `total_fat` and `saturated_fat`
+
 
 I was also interested in how the recipe's `date_submitted` values related with the length that each recipe was estimated to take (`minutes`) so I performed an additional aggregate exploration shown below:
 
@@ -124,8 +129,8 @@ print(split_time.groupby('date_submitted(percentile)')[['minutes', 'n_steps', 'n
 |                          0.9 |  178.461  |  10.3345  |         9.38282 |    431.66  |     32.4035 |
 |                          1   |   79.6851 |  11.7793  |         9.63483 |    461.484 |     37.0418 |
 
+<iframe src="assets/date-min.html" width=450 height=550 frameBorder=0></iframe>
 - Because the range of the `date_submitted` values were so big in this dataset (from `2008-01-01 00:00:00` to `2018-12-04 00:00:00`), I decided to split the `date_submitted` column into percentiles in order to calculate the aggregate statistics for `minutes`, `n_steps`, `n_ingredients`, `calories`, and `total_fat`.
-INSERT GRAPH
 
 ---
 ## Assessment of Missingness
@@ -182,14 +187,19 @@ missing_pivot = missing_pivot / missing_pivot.sum(axis = 0)
 | 2010-05-05 00:00:00 | 0.00145045  | 0.000360101 |
 
 For the `date_submitted` column, I also used a permutation test similar to the test with `indiv_ratings` by calculating the total variation distance between the missing and non-missing `average_ratings` distributions with respect to the dates each recipe was submitted. Here, my observed test statistic was 0.425 and my p-value was also 0.0. I then rejected my null hypothesis again to conclude that there is significant statistical evidence that missingness in `average_ratings` is MAR dependent on `date_submitted`.
-INSERT PLOTS
+
+<iframe src="assets/date-avg.html" width=450 height=550 frameBorder=0></iframe>
+This histogram above reveals the differences in observed distributions of recipe's `date_submitted` attribute for recipes with missing `average_ratings` compared to those with `average_ratings` to show that there may be a MAR dependency of `average_ratings` to `date_submitted`.
+
 
 Lastly, when comparing missingness between `average_ratings` and `sodium`, I used the hypotheses:
 - null: average_ratings is not MAR dependent on sodium
 - alternative: average_ratings is MAR dependent on sodium
 
 Because TDV of sodium is numerical data, I used a permutation test with the absolute difference in median of sodium between the missing and nonmissing `average_ratings` groups. My observed test statistic was 1.0 and I calculated a p-value of 0.38. Therefore, with a significance threshold of 0.5, I failed to reject the null hypothesis and concluded that there is no statistical evidence that average_ratings is MAR dependent on sodium.
-INSERT PLOTS
+
+<iframe src="assets/sodium-avg.html" width=450 height=550 frameBorder=0></iframe>
+This histogram above reveals how similar the distributions for missing and not-missing `average_ratings` groups in regards to the `sodium` column. Since the distributions are so similar, we can conclude based on our assessment of missingness and the histogram that `average_ratings` is not MAR dependent on `sodium`.
 
 ---
 ## Hypothesis Testing
