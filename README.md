@@ -30,7 +30,7 @@ print(recipes.dtypes.to_markdown())
 | ingredients    | object |
 | n_ingredients  | int64  |
 
-The second dataset (called 'interactions') contains user interaction data from food.com's Raw_interactions.csv file and includes user account information, reviews, and ratings for various recipes. There are 731927 rows in this dataframe, one for each interaction. The main column I used to answer my question was the 'ratings' column, which contains the rating given by each user for the recipe.
+The second dataset (called 'interactions') contains user interaction data from food.com's Raw_interactions.csv file and includes user account information, reviews, and ratings for various recipes. There are 731927 rows in this dataframe, one for each interaction. The main column I used to answer my question was the `ratings` column, which contains the rating given by each user for the recipe.
 
 ```py
 print(interactions.dtypes.to_markdown())
@@ -50,7 +50,7 @@ print(interactions.dtypes.to_markdown())
 #### Data Cleaning
 The data cleaning steps I took to organize my data included merging the two datasets and thening clean up the resulting dataframe to make it easily usable for data anlysis. My steps specifically included:
 1. Left merging the recipes and interaction data sets together on 'recipe_id' column.
-2. Dropping all unnecessary columns unused in data analysis ('review', 'contributor_id', 'description',  'tags', 'steps', 'ingredients', and 'user_id').
+2. Dropping all unnecessary columns unused in data analysis (`review, contributor_id, description,  tags, steps, ingredients`, and `user_id`).
 2. Filling all user ratings of 0 with `np.nan`. This is a necessary step to allow for accurate data analysis without having the 0's skew the results. In addition, the rating system in food.com ranges from 1 to 5  so the ratings of 0 in the data were likely inputted due to the lack of ratings for the recipe itself, not that users disliked the recipe. (In fact, many of these recipes with ratings of 0 had great reviews!)
 3. Calculating the average rating for recipe and merging these averages to the overall full_recipe dataframe.
 5. Renaming columns in the dataframe so that their names are more descriptive.
@@ -136,7 +136,7 @@ print(split_time.groupby('date_submitted(percentile)')[['minutes', 'n_steps', 'n
 ## Assessment of Missingness
 
 #### NMAR Analysis
-I don't believe there is a column in my dataset that is NMAR. Of all the columns in the full_recipes dataframe, only four had missing values: `interaction_date, name, indiv_rating, average_rating.` 
+**I don't believe there is a column in my dataset that is NMAR.** Of all the columns in the full_recipes dataframe, only four had missing values: `interaction_date, name, indiv_rating, average_rating.` 
 
 `interaction_date` and `name` both only had one missing value, likely because the raw `recipes` dataframe had an additional recipe that the `interactions` dataframe did not so when merging the two dataframes together, `np.nans` would replace user interaction information about that recipe in the `interactions` dataframe. In addition, upon further investigation, this recipe also has a missing value in the `name` column under the recipes dataframe as well. Therefore, without loss of generality, you can tell that these individual columns are dependent on each other because anytime there are any recipe_id's in the raw `recipes` dataframe that are not in the `interactions` dataframe, there will be missing values in the attributes from the interactions dataframe. In conclusion, the missing value in these two columns are likely not NMAR.
 
@@ -149,7 +149,7 @@ Ultimately, because these four columns that contain missing values can be explai
 
 Here, I investigated the missingness dependency of the `average_ratings` column on the missing values of the `indiv_ratings` column, the `date_submitted` column, and the `sodium` nutritional column. I hypothesized that `average_ratings` would be MAR dependent on the `indiv_ratings` column and the `date_submitted` column, but not the `sodium` column.
 
-When comparing missingness between `average_ratings` and `indiv_ratings`, I used the hypotheses:
+**When comparing missingness between `average_ratings` and `indiv_ratings`, I used the hypotheses:**
 - null: `average_ratings` is not MAR dependent on `indiv_ratings`
 - alternative: `average_ratings` is MAR dependent on `indiv_ratings`
 
@@ -168,7 +168,7 @@ missing_pivot = missing_pivot / missing_pivot.sum(axis = 0)
 I then ran a permutation test using the total variation distance as my test statistic. What I got was a p-value of 0.0 in which all values in the test statistic array were less than my observed test statistic (0.947). Therefore, I rejected the null hypothesis to claim that there is significant statistical evidence that missingness in `average_ratings` is MAR dependent on missingness in `indiv_ratings`.
 
 
-When comparing missingness between `average_ratings` and `date_submitted`, I used the hypotheses:
+**When comparing missingness between `average_ratings` and `date_submitted`, I used the hypotheses:**
 - null: `average_ratings` is not MAR dependent on `date_submitted`
 - alternative: `average_ratings` is MAR dependent on `dated_submitted`
 
@@ -192,7 +192,7 @@ For the `date_submitted` column, I also used a permutation test similar to the t
 This histogram above reveals the differences in observed distributions of recipe's `date_submitted` attribute for recipes with missing `average_ratings` compared to those with `average_ratings` to show that there is likely a MAR dependency of `average_ratings` to `date_submitted`.
 
 
-Lastly, when comparing missingness between `average_ratings` and `sodium`, I used the hypotheses:
+**Lastly, when comparing missingness between `average_ratings` and `sodium`, I used the hypotheses:**
 - null: `average_ratings` is not MAR dependent on `sodium`
 - alternative: `average_ratings` is MAR dependent on `sodium`
 
