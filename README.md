@@ -210,34 +210,34 @@ In addition, I filled the missing values in the `average_ratings` column by rand
 I also decided to determine the cutoff value of fatty v. not fatty foods by using the 50th percentile of the `total_fat` and `saturated_fat` columns. This allows me to directly compare the average ratings of the 2 fat groups in each test, one with fattier recipes and one with less fatty recipes.
 
 #### Hypothesis Testing of Fattiness v Average User Rating (using `total_fat`):
-Hypotheses:
+**Hypotheses:**
 - Null: The average rating for fattier foods (based on `total_fat`) is the same as the average rating for less fatty foods.
 - Alternative: The average rating for fattier foods (based on `total_fat`) is higher than the average rating for less fatty foods.
 
     Conducting a hypothesis test under these two hypotheses will directly answer the question of whether fattier foods are more highly rated on average because rejecting the null will allow me to conclude that there is evidence that fattier foods are more highly rated on average while failing to reject the null will lead me to conclude that there is not enough evidence that fattier foods are more highly rated on average.
     
-Simulation:
+**Simulation:**
 - I used a test statistic of **difference in group medians between fattier foods and less fattier foods**. Because the alternative hypothesis is claiming that fattier foods are more highly rated, there is a direction in the hypothesis, which is why I refrained from using absolute difference. Also, since average rating is a numerical type of data, I decided to use group medians rather than TVD.
 - For the simulation, I used a *permutation test* because I am comparing whether the two fat distributions samples are from the same distribution.
 - I used a significance level of 0.05 as this is a standard significance level that is usually used for hypothesis testing.
 - My observed test statistic was 0.010
 
-Results and conclusion:
+**Results and conclusion:**
 - I calculated a p-value of 0.0, which led me to reject the null hypothesis and conclude that there is significant statistical evidence that the average rating for fattier foods based on `total_fat` is higher than the average rating for less fatty foods.
 
 
 #### Hypothesis Testing of Fattiness v Average User Rating (using `saturated_fat`):
-Hypotheses:
+**Hypotheses:**
 - Null: The average rating for fattier foods (based on `saturated_fat`) is the same as the average rating for less fatty foods.
 - Alternative: The average rating for fattier foods (based on `saturated_fat`) is higher than the average rating for less fatty foods.
 
     Again, similar to the hypothesis test using `total_fat`, conducting a hypothesis test under these two hypotheses will directly allow me to answer the question of whether fattier foods are more highly rated on average. I am merely using another similar recipe attribute to answer the same question.
     
-Simulation:
+**Simulation:**
 - I used permutation testing, the **difference in group medians between fattier foods and less fattier foods** test statistic, and the same significance level of 0.05 as the previous hypothesis test with `total_fat`.
 - My observed statistic was 0.182.
 
-Results and conclusion:
+**Results and conclusion:**
 - I calculated a p-value of 0.02, which still led me to reject the null hypothesis because my p-value is less than the significance level of 0.05. Ultimately, I concluded that there is still significant statistical evidence that the average rating for fattier foods is higher than the average rating for less fatty foods even when using `saturated_fat`.
 
 
