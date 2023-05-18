@@ -75,6 +75,8 @@ print(full_recipes.head().to_markdown(index = False))
 
 #### Univariate Analysis
 
+<iframe src="assets/uni-avg.html" width=800 height=600 frameBorder=0></iframe>
+
 
 
 #### Bivariate Analysis
