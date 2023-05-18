@@ -35,6 +35,7 @@ The second dataset (called 'interactions') contains user interaction data from f
 ```py
 print(interactions.dtypes.to_markdown())
 ```
+
 |column name| type   |
 |:----------|:-------|
 | user_id   | int64  |
@@ -62,7 +63,6 @@ The data cleaning steps I took to organize my two datasets were to merge the dat
 Below are the first 5 rows of the fully cleaned `full_recipes` dataframe:
 ```py
 print(full_recipes.head().to_markdown(index = False))
-
 ```
 
 |   recipe_id | date_submitted      | interaction_date    | name                                 |   indiv_rating |   average_rating |   minutes |   n_steps |   n_ingredients |   calories |   total_fat |   sugar |   sodium |   protein |   saturated_fat |   carbs |
@@ -86,6 +86,7 @@ As part of my exploratory data analysis, I chose a couple columns from `full_rec
 ```py
 print(full_recipes.groupby('indiv_rating')[['total_fat', 'saturated_fat']].mean().to_markdown())
 ```
+
 |   indiv_rating |   total_fat |   saturated_fat |
 |---------------:|------------:|----------------:|
 |              1 |     37.0564 |         46.6791 |
@@ -102,6 +103,7 @@ I was also interested in how the recipe's `date_submitted` values related with t
 ```py
 print(split_time.groupby('date_submitted(percentile)')[['minutes', 'n_steps', 'n_ingredients', 'calories', 'total_fat']].mean().to_markdown())
 ```
+
 |   date_submitted(percentile) |   minutes |   n_steps |   n_ingredients |   calories |   total_fat |
 |-----------------------------:|----------:|----------:|----------------:|-----------:|------------:|
 |                          0.1 |   80.2761 |   9.61853 |         8.98569 |    397.839 |     29.8684 |
@@ -145,6 +147,7 @@ Then for the `indiv_ratings` column, I created two new boolean columns for wheth
 missing_pivot = missing_df.pivot_table(index = 'indiv_missing', columns = 'average_missing', aggfunc = 'count', values = 'recipe_id', fill_value = 0)
 missing_pivot = missing_pivot / missing_pivot.sum(axis = 0)
 ```
+
 | indiv_missing   |     False |   True |
 |:----------------|----------:|-------:|
 | False           | 0.94708   |      0 |
@@ -162,6 +165,7 @@ Below is a pivot table comparing the date a recipe is submitted and whether the 
 missing_pivot = missing_df.pivot_table(index = 'date_submitted', columns = 'average_missing', aggfunc = 'count', values = 'recipe_id', fill_value = 0)
 missing_pivot = missing_pivot / missing_pivot.sum(axis = 0)
 ```
+
 | date_submitted      |       False |        True |
 |:--------------------|------------:|------------:|
 | 2011-03-04 00:00:00 | 9.92869e-05 | 0           |
