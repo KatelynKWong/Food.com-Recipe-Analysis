@@ -1,4 +1,4 @@
-# Are Recipes with Higher Fat Contents more of a Crowd Pleaser?
+# Are Recipes with Higher Fat Content more of a Crowd Pleaser?
 by Katelyn Wong (kkw004@ucsd.edu)
 
 ---
