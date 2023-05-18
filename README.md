@@ -78,6 +78,8 @@ print(full_recipes.head().to_markdown(index = False))
 <iframe src="assets/uni-avg.html" width=600 height=450 frameBorder=0></iframe>
 - According to the distribution of average recipe ratings histogram, we see that the distribution is unimodal, skewed to the left, and has a range of 5. In addition, the average recipe rating on food.com is 4.677 (obtained by calculating `full_recipes['average_rating'].mean()`) and a majority of the recipes have at least a 4 star rating. This severe skew in data could potentially affect data analyses on the distribution, especially if mean is used.
 
+<iframe src="assets/uni-fat.html" width=600 height=450 frameBorder=0></iframe>
+- This distribution reveals that 
 
 #### Bivariate Analysis
 
