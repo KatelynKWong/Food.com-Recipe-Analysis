@@ -75,8 +75,8 @@ print(full_recipes.head().to_markdown(index = False))
 
 #### Univariate Analysis
 
-<iframe src="assets/uni-avg.html" width=800 height=600 frameBorder=0></iframe>
-
+<iframe src="assets/uni-avg.html" width=600 height=450 frameBorder=0></iframe>
+- According to the distribution of average recipe ratings histogram, we see that the distribution is unimodal, skewed to the left, and has a range of 5. In addition, the average recipe rating on food.com is 4.677 (obtained by calculating `full_recipes['average_rating'].mean()`) and a majority of the recipes have at least a 4 star rating. This severe skew in data could potentially affect data analyses on the distribution, especially if mean is used.
 
 
 #### Bivariate Analysis
@@ -183,7 +183,7 @@ Lastly, when comparing missingness between `average_ratings` and `sodium`, I use
 - null: average_ratings is not MAR dependent on sodium
 - alternative: average_ratings is MAR dependent on sodium
 
-Because TDV of sodium is numerical data, I used a permutation test with the absolute difference in mean of sodium between the missing and nonmissing `average_ratings` groups. My observed test statistic was 0.232 and I calculated a p-value of 0.9. Therefore, with a significance threshold of 0.5, I failed to reject the null hypothesis and concluded that there is no statistical evidence that average_ratings is MAR dependent on sodium.
+Because TDV of sodium is numerical data, I used a permutation test with the absolute difference in median of sodium between the missing and nonmissing `average_ratings` groups. My observed test statistic was 1.0 and I calculated a p-value of 0.38. Therefore, with a significance threshold of 0.5, I failed to reject the null hypothesis and concluded that there is no statistical evidence that average_ratings is MAR dependent on sodium.
 INSERT PLOTS
 
 ---
@@ -202,9 +202,10 @@ Hypotheses:
     Conducting a hypothesis test under these two hypotheses will directly allow me to answer the question of whether fattier foods are more highly rated on average because rejecting the null will allow me to conclude that there is evidence that fattier foods are more highly rated on average while failing to reject the null will allow me to conclude that there is not enough evidence that fattier foods are more highly rated on average.
     
 Simulation:
-- I used a test statistic of **difference in group means between fattier foods and less fattier foods**. Because the alternative hypothesis is claiming that fattier foods are more highly rated, there is a direction in the hypothesis, which is why I refrained from using absolute difference. Also, since average rating is a numerical type of data, I decided to use group means rather than TVD.
+- I used a test statistic of **difference in group medians between fattier foods and less fattier foods**. Because the alternative hypothesis is claiming that fattier foods are more highly rated, there is a direction in the hypothesis, which is why I refrained from using absolute difference. Also, since average rating is a numerical type of data, I decided to use group medians rather than TVD.
 - For the simulation, I used a *permutation test* because I am comparing whether the two fat distributions samples are from the same distribution.
 - I used a significance level of 0.05 as this is a standard significance level that is usually used for hypothesis testing.
+- My observed test statistic was 0.010
 
 Results and conclusion:
 - I calculated a p-value of 0.0, which led me to reject the null hypothesis and conclude that there is significant statistical evidence that the average rating for fattier foods based on `total_fat` is higher than the average rating for less fatty foods.
@@ -218,7 +219,8 @@ Hypotheses:
     Again, similar to the hypothesis test using `total_fat`, conducting a hypothesis test under these two hypotheses will directly allow me to answer the question of whether fattier foods are more highly rated on average. I am merely using another similar category to answer the same question.
     
 Simulation:
-- I used permutation testing, the **difference in group means between fattier foods and less fattier foods** test statistic, and the same significance level of 0.05 as the previous hypothesis test with `total_fat`.
+- I used permutation testing, the **difference in group medians between fattier foods and less fattier foods** test statistic, and the same significance level of 0.05 as the previous hypothesis test with `total_fat`.
+- My observed statistic was 0.182
 
 Results and conclusion:
 - I calculated a p-value of 0.02, which still led me to reject the null hypothesis because my p-value is less than the significance level of 0.05. Ultimately, I concluded that there is still significant statistical evidence that the average rating for fattier foods is higher than the average rating for less fatty foods even when using `saturated_fat`.
