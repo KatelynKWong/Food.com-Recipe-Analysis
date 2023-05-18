@@ -79,7 +79,10 @@ print(full_recipes.head().to_markdown(index = False))
 - According to the distribution of average recipe ratings histogram, we see that the distribution is unimodal, skewed to the left, and has a range of 5. In addition, the average recipe rating on food.com is 4.677 (obtained by calculating `full_recipes['average_rating'].mean()`) and a majority of the recipes have at least a 4 star rating. This severe skew in data could potentially affect data analyses on the distribution, especially if mean is used.
 
 <iframe src="assets/uni-fat.html" width=600 height=450 frameBorder=0></iframe>
-- This distribution reveals that 
+- According to this histogram, the distribution of total fat of each recipe is unimodal, centered on the median of 20, and right skewed. The IQR is 31 and there are many outliers outside of the interquartile range, but I chose to keep these outliers in the dataset and instead, limit the range of the x-axis (total_fat) to 0-150 PDV to focus on the bulk of the data. Again, the skew in the data indicates that using the median for analysis may yield more accurate results than using the mean.
+
+<iframe src="assets/uni-sfat.html" width=600 height=450 frameBorder=0></iframe>
+- This distribution is also similar to the distribution above. It is unimodal, there is a right skew, and the median is centered at 22 PDV (which is close to the median at 20 PDV of the Total Fat Distribution). The IQR is approximately 42 which means that the spread of this distribution is wider than the Total Fat Distribution. Similarly, the skew in this distribution and the large number of outliers indicates that using the median for any hypothesis testing is more accurate than using the mean, which can be affected by the skew and outlier data.
 
 #### Bivariate Analysis
 
