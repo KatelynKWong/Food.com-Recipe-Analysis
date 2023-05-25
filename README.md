@@ -242,6 +242,7 @@ I also decided to determine the cutoff value of fatty v. not fatty foods by usin
 **Results and conclusion:**
 - I calculated a p-value of 0.02, which still led me to reject the null hypothesis because my p-value is less than the significance level of 0.05. Ultimately, I concluded that there is still significant statistical evidence that the average rating for fattier foods is higher than the average rating for less fatty foods even when using `saturated_fat`.
 
+
 ---
 # Conclusion
 Overall, statistical evidence appears to support the conclusion that there is a higher average rating for fattier foods according to the hypothesis tests.
